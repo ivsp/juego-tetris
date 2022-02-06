@@ -1,3 +1,8 @@
+
+const boardWidth = 10;
+const boardHeight = 20;
+
+
 const divBody = document.createElement('div');
 divBody.classList.add('body_container');
 document.body.appendChild(divBody);
@@ -15,7 +20,7 @@ divBodyHeader.appendChild(divLogo);
 
 const imgHeader = document.createElement('img');
 imgHeader.classList.add('body_container--img');
-imgHeader.src = 'imagenes-senay/tetris-logo.jpg';
+imgHeader.src = './src/tetris-logo.jpg';
 divLogo.appendChild(imgHeader);
 
 const mainEl = document.createElement('main');
@@ -35,17 +40,17 @@ divMainSplit.appendChild(divContainerTetris);
 
 // El de arriba es el div que contiene los 200 divs con los 200 mini divs dentro.
 
-drawBoard();
+drawBoard('cells','cells_padding',boardWidth,boardHeight);
 
-function drawBoard() {
+function drawBoard(mainContainerClass,secondContainerClass,width,heigth) {
 
-    for (let i = 1; i <= 200; i++) {
+    for (let i = 1; i <= width*heigth; i++) {
         const drawBoardOutboardCells = document.createElement('div');
-        drawBoardOutboardCells.classList.add('cells');
+        drawBoardOutboardCells.classList.add(mainContainerClass);
         divContainerTetris.appendChild(drawBoardOutboardCells);
 
         const drawBoardInnerCells = document.createElement('div');
-        drawBoardInnerCells.classList.add('cells_padding');
+        drawBoardInnerCells.classList.add(secondContainerClass);
         drawBoardOutboardCells.appendChild(drawBoardInnerCells);
 
     }
