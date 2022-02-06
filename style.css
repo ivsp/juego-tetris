@@ -97,5 +97,9 @@
 .mini_container--rotate {
     display: flex;
     justify-content: center;
+}
+
+.mini_container--rotate>i {
+    margin-right: 10px;
     margin-left: 0.5rem;
 }
