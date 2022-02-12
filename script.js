@@ -1,4 +1,3 @@
-
 const boardWidth = 10;
 const boardHeight = 20;
 
@@ -40,11 +39,11 @@ divMainSplit.appendChild(divContainerTetris);
 
 // El de arriba es el div que contiene los 200 divs con los 200 mini divs dentro.
 
-drawBoard('cells','cells_padding',boardWidth,boardHeight);
+drawBoard('cells', 'cells_padding', boardWidth, boardHeight);
 
-function drawBoard(mainContainerClass,secondContainerClass,width,heigth) {
+function drawBoard(mainContainerClass, secondContainerClass, width, heigth) {
 
-    for (let i = 1; i <= width*heigth; i++) {
+    for (let i = 1; i <= width * heigth; i++) {
         const drawBoardOutboardCells = document.createElement('div');
         drawBoardOutboardCells.classList.add(mainContainerClass);
         divContainerTetris.appendChild(drawBoardOutboardCells);
@@ -135,3 +134,49 @@ divRotate.appendChild(rotate);
 
 
 // console.log(divBody);
+
+// Creo los Arrays de los Tetrominoe.
+
+const tetrominoI = [
+    [1, boardWidth + 1, boardWidth * 2 + 1, boardWidth * 3 + 1],
+    [boardWidth, boardWidth + 1, boardWidth + 2, boardWidth + 3],
+    [1, boardWidth + 1, boardWidth * 2 + 1, boardWidth * 3 + 1],
+    [boardWidth, boardWidth + 1, boardWidth + 2, boardWidth + 3]
+]
+const tetrominoL = [
+    [0, 1, boardWidth + 1, boardWidth * 2 + 1],
+    [2, boardWidth, boardWidth + 1, boardWidth + 2],
+    [1, boardWidth + 1, boardWidth * 2 + 1, boardWidth * 2 + 2],
+    [boardWidth, boardWidth + 1, boardWidth + 2, boardWidth * 2]
+]
+const tetrominoS = [
+    [0, boardWidth, boardWidth + 1, boardWidth * 2 + 1],
+    [1, 2, boardWidth, boardWidth + 1],
+    [0, boardWidth, boardWidth + 1, boardWidth * 2 + 1],
+    [1, 2, boardWidth, boardWidth + 1]
+]
+const tetrominoZ = [
+    [1, boardWidth, boardWidth + 1, boardWidth * 2],
+    [0, 1, boardWidth + 1, boardWidth + 2],
+    [1, boardWidth, boardWidth + 1, boardWidth * 2],
+    [0, 1, boardWidth + 1, boardWidth + 2]
+]
+const tetrominoJ = [
+    [1, boardWidth + 1, boardWidth * 2, boardWidth * 2 + 1],
+    [0, boardWidth, boardWidth + 1, boardWidth + 2],
+    [0, 1, boardWidth, boardWidth * 2],
+    [0, 1, 2, boardWidth + 2]
+]
+const tetrominoO = [
+    [0, 1, boardWidth, boardWidth + 1],
+    [0, 1, boardWidth, boardWidth + 1],
+    [0, 1, boardWidth, boardWidth + 1],
+    [0, 1, boardWidth, boardWidth + 1]
+]
+const tetrominoT = [
+    [1, boardWidth, boardWidth + 1, boardWidth * 2 + 1],
+    [1, boardWidth, boardWidth + 1, boardWidth + 2],
+    [0, boardWidth, boardWidth + 1, boardWidth * 2],
+    [0, 1, 2, boardWidth + 1]
+]
+const currentTetrominoe = [tetrominoI, tetrominoL, tetrominoS, tetrominoZ, tetrominoJ, tetrominoO, tetrominoT]
