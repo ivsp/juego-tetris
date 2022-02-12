@@ -47,7 +47,13 @@
     opacity: 0.2;
 }
 
-.cells:hover {
+.opacity{
+    opacity: 1;
+
+}
+
+/* En un futuro nos la cargaremos */
+.cells:hover { 
     opacity: 1;
 }
 
