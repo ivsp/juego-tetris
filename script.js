@@ -393,3 +393,54 @@ function moveDown() {
   }
   return canMove;
 }
+
+/**
+ * CREO LA FUNCIÓN rotate():
+ *
+ *Función que actualizará el valor de la variable currentTetromioe por el valor de la nueva posición del array
+
+ NOTA: La función no está del todo pulida. Algunas piezas se desplazan hacia abajo al girar, y se mueven a la izquierda y a la derecha cuando llegan a los bordes
+ derecho e izquierdo.
+ El desplazamiento hacia abajo creo que se debe a que el punto de rotación de la pieza cambia con cada giro, y yo asigno siempre el mismo, la posición 1 del array.
+ Los desplazamientos a izquierda y derecha se deben a que resto o sumo uno a cada una de las posiciones de la pieza cuando van a llegar al borde, de esta manera se evita el choque,
+ pero siempre se quedan a 1 celda del borde del tablero.
+ */
+
+
+function rotate() {
+  let canRotate = true; //creo una variable boolean que me indica si se puede o no rotar la pieza
+  objetTetromino.rotation++; //paso a la siguiente rotacion
+  if (objetTetromino.rotation >= tetrominoeList[objetTetromino.positionAtTetrominoeList].length) {
+    objetTetromino.rotation = 0;
+  }
+  let newRotate = tetrominoeList[objetTetromino.positionAtTetrominoeList][objetTetromino.rotation];
+  let newRotatePosition = newRotate.map((p) => p = p + currentTetrominoe[1])
+  //tengo que sumar a todas las posiciones (referenciadas al 0,0) la primera posicion de mi pieza, que es el centro del giro, de esta forma, la nueva pieza me saldrá en la posición en la que se encuantra el tetromino actual
+
+  //console.log(newRotatePosition);
+  undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
+  let opacityDivsDOM = document.querySelectorAll(".opacity");
+  newRotatePosition.forEach((p) => {
+    console.log(newRotatePosition)
+    if (p / boardWidth > boardHeight) { //condición para que la pieza no rote cuando toca el borde inferior
+      canRotate = false;
+    } else if (p % boardWidth === boardWidth - 1) { //condición para que la pieza se ajuste cuando está en el borde derecho
+      newRotatePosition = newRotatePosition.map((pos) => pos -= 1);
+    } else if (p % boardWidth === 0) { //condición para que la pieza se ajuste cuando está en el borde izquierdo
+      newRotatePosition = newRotatePosition.map((pos) => pos += 1);
+    } else {
+      opacityDivsDOM.forEach((div) => {
+        if (div.id === p.toString()) {
+          canRotate = false;
+        }
+      });
+    }
+  });
+  if (canRotate === true) {
+    currentTetrominoe = newRotatePosition;
+    drawTetrominoeInMainBoard();
+  } else {
+    drawTetrominoeInMainBoard();
+  }
+  return canRotate;
+}
