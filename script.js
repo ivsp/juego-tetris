@@ -575,3 +575,35 @@ const gameInterval = setInterval(() => {
 }, 1000);
 
 gameInterval;
+
+
+// ------------------------------------------
+
+// VOY A CREAR LOS EVENTOS PARA MOVER LA PIEZA CUANDO PULSEMOS LAS FLECHAS
+
+// izquierda = 37
+// arriba = 38
+// derecha = 39
+// abajo = 40
+
+// VOY A EMPEZAR POR MOVER LA PIEZA HACIA LA DERECHA CUANDO PULSAMOS LA FLECHA HACIA LA DERECHA
+
+
+
+document.body.onkeydown=function(event){
+  switch(event.keyCode){
+      case 37: // Izquierda
+      moveLeft()
+          ;        
+          break;
+      case 38: // Arriba
+      rotate()        
+          break;
+      case 39: // Derecha
+      moveRight();        
+          break;
+      case 40: // Bajar
+      moveDown();
+          break;
+  }
+}
