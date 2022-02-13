@@ -95,17 +95,17 @@ const div3Arrows = document.createElement("div");
 div3Arrows.classList.add("mini_container--arrows");
 divMini.appendChild(div3Arrows);
 
-const left = document.createElement("i");
-left.classList.add("fas", "fa-arrow-left");
-div3Arrows.appendChild(left);
+const leftArrow = document.createElement("i");
+leftArrow.classList.add("fas", "fa-arrow-left");
+div3Arrows.appendChild(leftArrow);
 
-const right = document.createElement("i");
-right.classList.add("fas", "fa-arrow-right");
-div3Arrows.appendChild(right);
+const rightArrow = document.createElement("i");
+rightArrow.classList.add("fas", "fa-arrow-right");
+div3Arrows.appendChild(rightArrow);
 
-const down = document.createElement("i");
-down.classList.add("fas", "fa-arrow-down");
-div3Arrows.appendChild(down);
+const downArrow = document.createElement("i");
+downArrow.classList.add("fas", "fa-arrow-down");
+div3Arrows.appendChild(downArrow);
 
 const span = document.createElement("span");
 span.classList.add("move");
@@ -116,14 +116,14 @@ const divRotate = document.createElement("div");
 divRotate.classList.add("mini_container--rotate");
 divMini.appendChild(divRotate);
 
-const up = document.createElement("i");
-up.classList.add("fas", "fa-arrow-up");
-divRotate.appendChild(up);
+const upArrow = document.createElement("i");
+upArrow.classList.add("fas", "fa-arrow-up");
+divRotate.appendChild(upArrow);
 
-const rotate = document.createElement("span");
-rotate.classList.add("rotate");
-rotate.textContent = "Rotate";
-divRotate.appendChild(rotate);
+const rotateArrow = document.createElement("span");
+rotateArrow.classList.add("rotate");
+rotateArrow.textContent = "Rotate";
+divRotate.appendChild(rotateArrow);
 
 // console.log(divBody);
 
@@ -153,7 +153,9 @@ const tetrominoJ = [
   [0, 1, boardWidth, boardWidth * 2],
   [0, 1, 2, boardWidth + 2],
 ];
-const tetrominoO = [[0, 1, boardWidth, boardWidth + 1]];
+const tetrominoO = [
+  [0, 1, boardWidth, boardWidth + 1]
+];
 
 const tetrominoT = [
   [1, boardWidth, boardWidth + 1, boardWidth * 2 + 1],
@@ -161,7 +163,7 @@ const tetrominoT = [
   [0, boardWidth, boardWidth + 1, boardWidth * 2],
   [0, 1, 2, boardWidth + 1],
 ];
-const currentTetrominoe = [
+const tetrominoeList = [
   tetrominoI,
   tetrominoL,
   tetrominoS,
@@ -170,7 +172,10 @@ const currentTetrominoe = [
   tetrominoO,
   tetrominoT,
 ];
-
+/*Defino una variable que contendrá la información de la pieza, se actualizará en cada interval
+y en cada movimiento o rotación de la pieza.
+*/
+let currentTetrominoe = [];
 //------------------------------------------------
 
 /***
@@ -209,17 +214,14 @@ function generateRandomTetrominoe(arr) {
   tetrominoeObject.piece = selectRandomPosition;
   tetrominoeObject.position =
     generateFirstLevelRandomNumber === 0 &&
-    generateSecondLevelRandomNumber === 1
-      ? (tetrominoeObject.position = 3)
-      : (tetrominoeObject.position = 4);
+    generateSecondLevelRandomNumber === 1 ?
+    (tetrominoeObject.position = 3) :
+    (tetrominoeObject.position = 4);
 
-  console.log(tetrominoeObject.position);
   tetrominoeObject.rotation = generateSecondLevelRandomNumber;
 
   return tetrominoeObject;
 }
-
-//generateRandomTetrominoe(currentTetrominoe);
 
 //------------------------------------------------
 
@@ -233,7 +235,6 @@ function generateRandomTetrominoe(arr) {
             - piece (Array<number>)  Por ejemplo si tengo el array [0, 10, 11, 21]
             - position (number) Mi índice es 4
             - rotation (number)
-
             la posición de mi pieza en el tabelro será la [4,14,15,25]
 
     1. SAber el giro del tetromino. ¿Qué propiedad de mi objeto me lo puede dar?
@@ -244,20 +245,151 @@ function generateRandomTetrominoe(arr) {
             PArece que sabiendo la posición (el índice) del primer cuadrado de mi pieza dentro del tablero, puedo 
             conseguir las demás posiciones, sumando ese índice a cada una de las posiciones iniciales.
  */
-
 //cada elemento de la clase cell va a tener una clase del 0 al 199 que indicará la posicion de ese elemnento en el tablero
 //de esta forma podremos seleccionar por el valor de esa clase. Es decir, nuestro div con la clase 4. lo seleccionaremos asi:
 // document.querySelector('.${posición de nuestra pieza}') --> Lo haremos con un forEach
 
-const objetTetromino = generateRandomTetrominoe(currentTetrominoe);
+const objetTetromino = generateRandomTetrominoe(tetrominoeList);
+currentTetrominoe = objetTetromino.piece;
+//console.log(currentTetrominoe);
+const fistPositionAtBoard = currentTetrominoe.map(
+  (pos) => (pos = pos + objetTetromino.position)
+);
+currentTetrominoe = fistPositionAtBoard;
 
-function drawTetrominoeInMainBoard(obj) {
-  const fistPositionAtBoard = obj.piece.map((p) => p + obj.position); //defino el nuevo array con la posición de entrada al tabelro
+function drawTetrominoeInMainBoard() {
+  //currentTetrominoe = fistPositionAtBoard;
+  //console.log(fistPositionAtBoard);
+  //defino el nuevo array con la posición de entrada al tabelro
   //Seleccionamos los div's de nuestro board a los que le asignaremos la clase opacity
-  fistPositionAtBoard.forEach((p) => {
-    const divDOM = document.getElementById(`${p}`);
+  currentTetrominoe.forEach((e) => {
+    const divDOM = document.getElementById(`${e}`);
+    //console.log(e);
     divDOM.classList.add("opacity");
   });
 }
 
-drawTetrominoeInMainBoard(objetTetromino);
+drawTetrominoeInMainBoard();
+
+//------------------------------------------------
+
+/**
+ * CREO LA FUNCIÓN undrawTetrominoeInMainBoard()
+ *
+ * tengo que seleccionar los divs de la posición de la pieza actual y eliminarlos, lo
+ * haré mediante un selector de id.
+ *
+ * */
+
+function undrawTetrominoeInMainBoard() {
+  const currentDivsDOM = currentTetrominoe.map((pos) =>
+    document.getElementById(`${pos}`)
+  );
+  currentDivsDOM.forEach((div) => div.classList.remove("opacity"));
+}
+
+//------------------------------------------------
+
+/**
+ * CREO LA FUNCIÓN moveRight():
+ *
+ * Antes de mover la pieza debo comprobar que esta puede moverse. Para ello, seleccionaré todos
+ * mis divs del board del DOM con la clase opacity y guardaré sus id's en un array de numbers.
+ * Ahora comprobaré que la nueva posición de mi pieza no interfiere con ninguno de esos div's
+ * al moverse, ni que ha sobrepasado los límites del tablero.
+ * Si se cumple la condición anterior, entonces eliminaré la pieza y la dibujaré
+ * en la nueva posición. Y devolveré un true.
+ * En caso contrario, si al moverse interfiere o se sale de los límites del tablero,
+ * entonces dejaré la pieza como está y devolveré un false.
+ *
+ * La función recibirá un array con la posición actual de la pieza. Esta función debe
+ * modificar las posiciones del array de entrada con las nuevas posiciones despues de mover
+ * la pieza.
+ *
+ */
+function moveRight() {
+  let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
+  const arrNewPosition = currentTetrominoe.map((p) => (p += 1));
+  undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
+  let opacityDivsDOM = document.querySelectorAll(".opacity");
+  currentTetrominoe.forEach((p) => {
+    if (p % boardWidth === boardWidth - 1) {
+      canMove = false;
+    } else {
+      opacityDivsDOM.forEach((div) => {
+        if (div.id === p.toString()) {
+          canMove = false;
+        }
+      });
+    }
+  });
+  if (canMove === true) {
+    currentTetrominoe = arrNewPosition;
+    drawTetrominoeInMainBoard();
+  } else {
+    drawTetrominoeInMainBoard();
+  }
+  return canMove;
+}
+/**
+ * CREO LA FUNCIÓN moveLeft():
+ *
+ *El procedimiento es el mismo que para moveRight, pero restando uno a la posición del array
+ *
+ */
+function moveLeft() {
+  let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
+  const arrNewPosition = currentTetrominoe.map((p) => (p -= 1));
+  undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
+  let opacityDivsDOM = document.querySelectorAll(".opacity");
+  currentTetrominoe.forEach((p) => {
+    if (p % boardWidth === 0) {
+      //la condición es que cuando el resto de la posición entre 10 sea 0 nos indica que hemos llegado al final del tablero por la izquierda
+      canMove = false;
+    } else {
+      opacityDivsDOM.forEach((div) => {
+        if (div.id === p.toString()) {
+          canMove = false;
+        }
+      });
+    }
+  });
+  if (canMove === true) {
+    currentTetrominoe = arrNewPosition;
+    drawTetrominoeInMainBoard();
+  } else {
+    drawTetrominoeInMainBoard();
+  }
+  return canMove;
+}
+
+/**
+ * CREO LA FUNCIÓN moveDown()):
+ *
+ *El procedimiento es el mismo que para moveRight, pero restando uno a la posición del array
+ */
+function moveDown() {
+  let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
+  const arrNewPosition = currentTetrominoe.map((p) => (p += 10));
+  undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
+  let opacityDivsDOM = document.querySelectorAll(".opacity");
+  currentTetrominoe.forEach((p) => {
+    if (p / boardWidth > boardHeight - 1) {
+      //si estamos en la ultima fila todos los cocientes de p/ancho serán mayores a 19
+      canMove = false;
+    } else {
+      opacityDivsDOM.forEach((div) => {
+        if (div.id === p.toString()) {
+          canMove = false;
+        }
+      });
+    }
+  });
+  if (canMove === true) {
+    currentTetrominoe = arrNewPosition;
+    drawTetrominoeInMainBoard();
+  } else {
+    drawTetrominoeInMainBoard();
+  }
+  return canMove;
+}
