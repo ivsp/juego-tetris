@@ -425,12 +425,12 @@ function moveRight() {
   const arrNewPosition = currentTetrominoe.map((p) => (p += 1));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
   let opacityDivsDOM = document.querySelectorAll(".opacity");
-  currentTetrominoe.forEach((p) => {
+  currentTetrominoe.forEach((p, i) => {
     if (p % boardWidth === boardWidth - 1) {
       canMove = false;
     } else {
       opacityDivsDOM.forEach((div) => {
-        if (div.id === p.toString()) {
+        if (div.id === arrNewPosition[i].toString()) {
           canMove = false;
         }
       });
@@ -455,13 +455,13 @@ function moveLeft() {
   const arrNewPosition = currentTetrominoe.map((p) => (p -= 1));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
   let opacityDivsDOM = document.querySelectorAll(".opacity");
-  currentTetrominoe.forEach((p) => {
+  currentTetrominoe.forEach((p, i) => {
     if (p % boardWidth === 0) {
       //la condición es que cuando el resto de la posición entre 10 sea 0 nos indica que hemos llegado al final del tablero por la izquierda
       canMove = false;
     } else {
       opacityDivsDOM.forEach((div) => {
-        if (div.id === p.toString()) {
+        if (div.id === arrNewPosition[i].toString()) {
           canMove = false;
         }
       });
@@ -486,13 +486,13 @@ function moveDown() {
   const arrNewPosition = currentTetrominoe.map((p) => (p += 10));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
   let opacityDivsDOM = document.querySelectorAll(".opacity");
-  currentTetrominoe.forEach((p) => {
+  currentTetrominoe.forEach((p, i) => {
     if (p / boardWidth > boardHeight - 1) {
       //si estamos en la ultima fila todos los cocientes de p/ancho serán mayores a 19
       canMove = false;
     } else {
       opacityDivsDOM.forEach((div) => {
-        if (div.id === p.toString()) {
+        if (div.id === arrNewPosition[i].toString()) {
           canMove = false;
         }
       });
@@ -539,6 +539,13 @@ function rotate() {
       canRotate = false;
     } else if (p % boardWidth === boardWidth - 1) { //condición para que la pieza se ajuste cuando está en el borde derecho
       newRotatePosition = newRotatePosition.map((pos) => pos -= 1);
+    } else if (p % boardWidth === boardWidth - 2) {
+      newRotatePosition = newRotatePosition.map((pos) => pos -= 2);
+    } else if (p % boardWidth === boardWidth - 3) {
+      newRotatePosition = newRotatePosition.map((pos) => pos -= 3);
+    } else if (p % boardWidth === boardWidth - 4) {
+      newRotatePosition = newRotatePosition.map((pos) => pos -= 3);
+
     } else if (p % boardWidth === 0) { //condición para que la pieza se ajuste cuando está en el borde izquierdo
       newRotatePosition = newRotatePosition.map((pos) => pos += 1);
     } else {
@@ -590,20 +597,19 @@ gameInterval;
 
 
 
-document.body.onkeydown=function(event){
-  switch(event.keyCode){
-      case 37: // Izquierda
-      moveLeft()
-          ;        
-          break;
-      case 38: // Arriba
-      rotate()        
-          break;
-      case 39: // Derecha
-      moveRight();        
-          break;
-      case 40: // Bajar
+document.body.onkeydown = function (event) {
+  switch (event.keyCode) {
+    case 37: // Izquierda
+      moveLeft();
+      break;
+    case 38: // Arriba
+      rotate()
+      break;
+    case 39: // Derecha
+      moveRight();
+      break;
+    case 40: // Bajar
       moveDown();
-          break;
+      break;
   }
 }
