@@ -79,9 +79,10 @@ divMini.appendChild(divMiniGrid);
 drawMiniBoard();
 
 function drawMiniBoard() {
-  for (let i = 1; i <= 16; i++) {
+  for (let i = 0; i < 16; i++) {
     const drawBoardOutboardCells = document.createElement("div");
     drawBoardOutboardCells.classList.add("cells");
+    drawBoardOutboardCells.id = `m${i}`; //añadimos una clase con un numero para poder seleccionar luego la celda
     divMiniGrid.appendChild(drawBoardOutboardCells);
 
     const drawBoardInnerCells = document.createElement("div");
@@ -172,10 +173,108 @@ const tetrominoeList = [
   tetrominoO,
   tetrominoT,
 ];
-/*Defino una variable que contendrá la información de la pieza, se actualizará en cada interval
-y en cada movimiento o rotación de la pieza.
-*/
-let currentTetrominoe = [];
+
+const tetrominoIMini = [
+  [1, 5, 9, 13],
+  [4, 5, 6, 7],
+];
+const tetrominoLMini = [
+  [1, 2, 6, 10],
+  [6, 8, 9, 10],
+  [1, 5, 9, 10],
+  [4, 5, 6, 8],
+];
+const tetrominoSMini = [
+  [1, 5, 6, 10],
+  [5, 6, 8, 9],
+];
+const tetrominoZMini = [
+  [2, 5, 6, 9],
+  [4, 5, 9, 10],
+];
+const tetrominoJMini = [
+  [2, 6, 9, 10],
+  [4, 8, 9, 10],
+  [1, 2, 5, 9],
+  [4, 5, 6, 10, ]
+];
+const tetrominoOMini = [
+  [5, 6, 9, 10]
+];
+
+const tetrominoTMini = [
+  [2, 5, 6, 10],
+  [1, 4, 5, 6],
+  [1, 5, 6, 9],
+  [4, 5, 6, 9],
+];
+const tetrominoeListMini = [
+  tetrominoIMini,
+  tetrominoLMini,
+  tetrominoSMini,
+  tetrominoZMini,
+  tetrominoJMini,
+  tetrominoOMini,
+  tetrominoTMini,
+];
+
+let currentTetrominoeMini = [];
+
+// . Genero la funcion drawTetrominoeInMiniBoard(tetrominoe): pinta el tetromino de entrada dentro del
+// // miniboard, suponiendo que es la posición 0.
+
+
+function generateRandomTetrominoeMini(arr) {
+  //defino el objeto que devolverá la función
+  let nextTetrominoeObject = {
+    positionAtTetrominoeListMini: 0,
+    piece: [],
+    position: 0,
+    rotation: 0,
+  };
+  //primero accedo al primer nivel de array
+  const generateFirstLevelRandomNumber = Math.floor(Math.random() * arr.length);
+  const selectRandomTetrominoeMini = arr[generateFirstLevelRandomNumber];
+
+  //ahora accedo al segundo nivel de array
+  const generateSecondLevelRandomNumber = Math.floor(
+    Math.random() * selectRandomTetrominoeMini.length
+  );
+  const selectRandomPosition =
+    selectRandomTetrominoeMini[generateSecondLevelRandomNumber];
+
+  //asignar los valores a mi objeto
+  nextTetrominoeObject.positionAtTetrominoeList = generateFirstLevelRandomNumber;
+  nextTetrominoeObject.piece = selectRandomPosition;
+  nextTetrominoeObject.position =
+    generateFirstLevelRandomNumber === 0 &&
+    generateSecondLevelRandomNumber === 1 ?
+    (nextTetrominoeObject.position = 3) :
+    (nextTetrominoeObject.position = 4);
+  nextTetrominoeObject.rotation = generateSecondLevelRandomNumber;
+
+  return nextTetrominoeObject;
+}
+
+
+
+const nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
+currentTetrominoeMini = nextTetrominoeObject.piece;
+console.log(nextTetrominoeObject);
+
+
+function drawTetrominoeInMiniBoard() {
+  //defino el nuevo array con la posición de entrada al tabelro
+  //Seleccionamos los div's de nuestro board a los que le asignaremos la clase opacity
+  currentTetrominoeMini.forEach((e) => {
+    const divDOM = document.getElementById(`m${e}`);
+    //console.log(e);
+    divDOM.classList.add("opacity");
+  });
+}
+
+drawTetrominoeInMiniBoard();
+
 //------------------------------------------------
 
 /***
@@ -189,7 +288,7 @@ let currentTetrominoe = [];
         - position (number)
         - rotation (number)
 */
-
+/*
 function generateRandomTetrominoe(arr) {
   //defino el objeto que devolverá la función
   let tetrominoeObject = {
@@ -222,7 +321,7 @@ function generateRandomTetrominoe(arr) {
 
   return tetrominoeObject;
 }
-
+*/
 //------------------------------------------------
 
 /**
@@ -248,9 +347,12 @@ function generateRandomTetrominoe(arr) {
 //cada elemento de la clase cell va a tener una clase del 0 al 199 que indicará la posicion de ese elemnento en el tablero
 //de esta forma podremos seleccionar por el valor de esa clase. Es decir, nuestro div con la clase 4. lo seleccionaremos asi:
 // document.querySelector('.${posición de nuestra pieza}') --> Lo haremos con un forEach
-
-const objetTetromino = generateRandomTetrominoe(tetrominoeList);
-currentTetrominoe = objetTetromino.piece;
+console.log(nextTetrominoeObject)
+const objetTetromino = nextTetrominoeObject;
+/*Defino una variable que contendrá la información de la pieza, se actualizará en cada interval
+y en cada movimiento o rotación de la pieza.
+*/
+let currentTetrominoe = tetrominoeList[objetTetromino.positionAtTetrominoeList][objetTetromino.rotation];
 //console.log(currentTetrominoe);
 const fistPositionAtBoard = currentTetrominoe.map(
   (pos) => (pos = pos + objetTetromino.position)
@@ -286,6 +388,17 @@ function undrawTetrominoeInMainBoard() {
     document.getElementById(`${pos}`)
   );
   currentDivsDOM.forEach((div) => div.classList.remove("opacity"));
+}
+
+/**
+ * CREO LA FUNCIÓN undrawTetrominoeInMiniBoard()
+ */
+
+function undrawTetrominoeInMiniBoard() {
+  console.log(currentTetrominoeMini)
+
+  const divDOM = currentTetrominoeMini.map((e) => document.getElementById(`m${e}`))
+  divDOM.forEach((div) => div.classList.remove("opacity"))
 }
 
 //------------------------------------------------
@@ -444,3 +557,21 @@ function rotate() {
   }
   return canRotate;
 }
+
+//------------------------------------------------
+/**
+ * CREO EL INTERVALO QUE HARÁ QUE EL JEGO FUNCIONE
+ */
+
+const gameInterval = setInterval(() => {
+  moveDown();
+  currentTetrominoe.forEach(p => {
+    //paro el intervalo cuando alguna de las posiciones de mi pieza llegue al final, o choque con alguna celda con la clase opacity
+    //que se encuentre en la fila inferior
+    if (p / boardWidth > boardHeight - 1) {
+      clearInterval(gameInterval);
+    }
+  })
+}, 1000);
+
+gameInterval;
