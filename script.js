@@ -580,6 +580,10 @@ function updateTetrisBoard() {
     let score = document.querySelector(".score_number");
     console.log(score.textContent);
     score.textContent = parseInt(score.textContent) + 50;
+    isTetris++;
+    if (isTetris === 4) {
+      score.textContent = parseInt(score.textContent) + 1000;
+    }
   } else {
     removeCells = removeCells.map((p) => (p = p - 10));
     if (removeCells[0] < 0) {
