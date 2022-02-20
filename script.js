@@ -225,8 +225,6 @@ const tetrominoeListMini = [
   tetrominoTMini,
 ];
 
-let currentTetrominoeMini = [];
-
 // . Genero la funcion drawTetrominoeInMiniBoard(tetrominoe): pinta el tetromino de entrada dentro del
 // // miniboard, suponiendo que es la posición 0.
 
@@ -263,8 +261,7 @@ function generateRandomTetrominoeMini(arr) {
 }
 
 let nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
-currentTetrominoeMini = nextTetrominoeObject.piece;
-
+console.log(nextTetrominoeObject);
 function drawTetrominoeInMiniBoard() {
   //defino el nuevo array con la posición de entrada al tabelro
   //Seleccionamos los div's de nuestro board a los que le asignaremos la clase opacity
@@ -276,6 +273,7 @@ function drawTetrominoeInMiniBoard() {
 }
 
 drawTetrominoeInMiniBoard();
+console.log(nextTetrominoeObject);
 
 //------------------------------------------------
 
@@ -312,7 +310,6 @@ function assingPositionInMainBoard() {
     tetrominoeList[currentTetrominoeObject.positionAtTetrominoeList][
       currentTetrominoeObject.rotation
     ];
-  console.log(currentTetrominoe);
   //console.log(currentTetrominoe);
   const fistPositionAtBoard = currentTetrominoe.map(
     (pos) => (pos = pos + currentTetrominoeObject.position)
@@ -356,9 +353,9 @@ function undrawTetrominoeInMainBoard() {
  */
 
 function undrawTetrominoeInMiniBoard() {
-  const divDOM = nextTetrominoeObject.piece.map((e) =>
-    document.getElementById(`m${e}`)
-  );
+  const divDOM = document
+    .querySelector(".mini_container")
+    .querySelectorAll(".opacity");
   divDOM.forEach((div) => div.classList.remove("opacity"));
 }
 
@@ -469,6 +466,10 @@ function moveDown() {
     drawTetrominoeInMainBoard();
   } else {
     drawTetrominoeInMainBoard();
+    nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
+    currentTetrominoeObject = nextTetrominoeObject;
+    assingPositionInMainBoard();
+    drawTetrominoeInMainBoard();
   }
   return canMove;
 }
@@ -523,30 +524,18 @@ function rotate() {
   return canMove;
 }
 
-/*
-
-
-
 //------------------------------------------------
 /**
  * CREO EL INTERVALO QUE HARÁ QUE EL JEGO FUNCIONE
  */
 
-/*
 const gameInterval = setInterval(() => {
   moveDown();
-  currentTetrominoe.forEach((p) => {
+  currentTetrominoeObject.piece.forEach((p) => {
     //paro el intervalo cuando alguna de las posiciones de mi pieza llegue al final, o choque con alguna celda con la clase opacity
     //que se encuentre en la fila inferior
-    if (p / boardWidth > boardHeight - 1) {
-      clearInterval(gameInterval);
-    }
   });
 }, 1000);
-
-gameInterval;
-
-*/
 
 // ------------------------------------------
 
@@ -575,3 +564,15 @@ document.body.onkeydown = function (event) {
       break;
   }
 };
+
+// ------------------------------------------
+
+function init() {
+  undrawTetrominoeInMainBoard();
+  undrawTetrominoeInMiniBoard();
+  nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
+  currentTetrominoeObject = nextTetrominoeObject;
+  assingPositionInMainBoard();
+  drawTetrominoeInMainBoard();
+  gameInterval;
+}
