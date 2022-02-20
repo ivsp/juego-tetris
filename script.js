@@ -330,6 +330,9 @@ function drawTetrominoeInMainBoard() {
 }
 
 drawTetrominoeInMainBoard();
+nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
+undrawTetrominoeInMiniBoard();
+drawTetrominoeInMiniBoard();
 
 //------------------------------------------------
 
@@ -465,11 +468,22 @@ function moveDown() {
     console.log(currentTetrominoeObject.position);
     drawTetrominoeInMainBoard();
   } else {
-    drawTetrominoeInMainBoard();
-    nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
-    currentTetrominoeObject = nextTetrominoeObject;
-    assingPositionInMainBoard();
-    drawTetrominoeInMainBoard();
+    if (isGameOver()) {
+      clearInterval(gameInterval);
+      alert("GAME OVER");
+    } else {
+      drawTetrominoeInMainBoard();
+      for (let i = 0; i <= boardHeight + 1; i++) {
+        updateTetrisBoard();
+      }
+      currentTetrominoeObject = nextTetrominoeObject;
+
+      assingPositionInMainBoard();
+      drawTetrominoeInMainBoard();
+      undrawTetrominoeInMiniBoard();
+      nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
+      drawTetrominoeInMiniBoard();
+    }
   }
   return canMove;
 }
@@ -531,11 +545,66 @@ function rotate() {
 
 const gameInterval = setInterval(() => {
   moveDown();
-  currentTetrominoeObject.piece.forEach((p) => {
-    //paro el intervalo cuando alguna de las posiciones de mi pieza llegue al final, o choque con alguna celda con la clase opacity
-    //que se encuentre en la fila inferior
-  });
 }, 1000);
+
+// ------------------------------------------
+/**
+ * FUNCIÓN QUE COMPRUEBA SI ES GAME OVER
+ */
+
+function isGameOver() {
+  let isGameOver = currentTetrominoeObject.piece.some((p) => p < 10);
+  return isGameOver;
+}
+
+// ------------------------------------------
+/**
+ *FUNCIÓN QUE ELIMINA UNA FILA Y SUMA EL SCORING
+ *
+ * esta función comprobará si se ha completado una fila y la eliminará, sumando 50 puntos al scoring.
+ * para ello seleccionaré las fias completas, las elimino del array y las pongo encima
+ */
+let removeCells = [190, 191, 192, 193, 194, 195, 196, 197, 198, 199];
+let isTetris = 0;
+function updateTetrisBoard() {
+  let allPiecesInBoard = [];
+  let divDOM = [];
+  let counter = 0;
+  console.log(removeCells);
+  removeCells.forEach((p) => {
+    divDOM.push(document.getElementById(p));
+    console.log(removeCells);
+    console.log(p);
+  });
+  divDOM.forEach((p) => {
+    if (p.classList.value.includes("opacity")) {
+      counter++;
+    }
+  });
+  if (counter === 10) {
+    const rowCompleted = removeCells.map((pos) =>
+      document.getElementById(`${pos}`)
+    ); //selecciono las filas completas
+    rowCompleted.forEach((div) => div.classList.remove("opacity")); //quito la clase opacity de esas celdas
+    let allOpacityCelss = document
+      .querySelector(".container_tetris")
+      .querySelectorAll(".opacity"); //selecciono todas las demás filas con la clase opacity restantes
+    allOpacityCelss.forEach((p) => allPiecesInBoard.push(parseInt(p.id))); //obtengo su id
+    //una vez obtenido su ide tengo que despintarlas, sumarle 10 y volverlas a pintar
+    allOpacityCelss.forEach((div) => div.classList.remove("opacity"));
+    let newCellsPosition = allPiecesInBoard.map((p) => (p += 10));
+    newCellsPosition.forEach((e) => {
+      const divDOM = document.getElementById(`${e}`);
+      divDOM.classList.add("opacity");
+      isTetris++;
+    });
+  } else {
+    removeCells = removeCells.map((p) => (p = p - 10));
+    if (removeCells[0] < 0) {
+      removeCells = [190, 191, 192, 193, 194, 195, 196, 197, 198, 199];
+    }
+  }
+}
 
 // ------------------------------------------
 
