@@ -67,8 +67,11 @@ scoreh3.classList.add("mini_container--score");
 divMini.appendChild(scoreh3);
 
 const scoreCounter = document.createElement("div");
-scoreCounter.textContent = "0";
+const scoreNumber = document.createElement("p");
+scoreNumber.classList.add("score_number");
+scoreNumber.textContent = "0";
 scoreCounter.classList.add("mini_container--number");
+scoreCounter.appendChild(scoreNumber);
 divMini.appendChild(scoreCounter);
 
 const divMiniGrid = document.createElement("div");
@@ -260,8 +263,6 @@ function generateRandomTetrominoeMini(arr) {
   return nextTetrominoeObject;
 }
 
-let nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
-console.log(nextTetrominoeObject);
 function drawTetrominoeInMiniBoard() {
   //defino el nuevo array con la posición de entrada al tabelro
   //Seleccionamos los div's de nuestro board a los que le asignaremos la clase opacity
@@ -271,9 +272,6 @@ function drawTetrominoeInMiniBoard() {
     divDOM.classList.add("opacity");
   });
 }
-
-drawTetrominoeInMiniBoard();
-console.log(nextTetrominoeObject);
 
 //------------------------------------------------
 
@@ -300,7 +298,6 @@ console.log(nextTetrominoeObject);
 //cada elemento de la clase cell va a tener una clase del 0 al 199 que indicará la posicion de ese elemnento en el tablero
 //de esta forma podremos seleccionar por el valor de esa clase. Es decir, nuestro div con la clase 4. lo seleccionaremos asi:
 // document.querySelector('.${posición de nuestra pieza}') --> Lo haremos con un forEach
-let currentTetrominoeObject = nextTetrominoeObject;
 /*Defino una variable que contendrá la información de la pieza, se actualizará en cada interval
 y en cada movimiento o rotación de la pieza.
 */
@@ -316,8 +313,6 @@ function assingPositionInMainBoard() {
   );
   currentTetrominoeObject.piece = fistPositionAtBoard;
 }
-console.log(currentTetrominoeObject.piece);
-assingPositionInMainBoard();
 
 function drawTetrominoeInMainBoard() {
   //defino el nuevo array con la posición de entrada al tabelro
@@ -328,11 +323,6 @@ function drawTetrominoeInMainBoard() {
     divDOM.classList.add("opacity");
   });
 }
-
-drawTetrominoeInMainBoard();
-nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
-undrawTetrominoeInMiniBoard();
-drawTetrominoeInMiniBoard();
 
 //------------------------------------------------
 
@@ -464,8 +454,6 @@ function moveDown() {
   if (canMove === true) {
     currentTetrominoeObject.piece = arrNewPosition;
     currentTetrominoeObject.position = arrNewPosition[0];
-    console.log(arrNewPosition);
-    console.log(currentTetrominoeObject.position);
     drawTetrominoeInMainBoard();
   } else {
     if (isGameOver()) {
@@ -507,8 +495,6 @@ function rotate() {
   let opacityDivsDOM = document.querySelectorAll(".opacity");
   let outOfBoundaries = newPosition.some((p) => p % boardWidth < 0);
   outOfBoundaries = newPosition.some((p) => p % boardWidth === boardWidth - 1);
-  console.log(newPosition);
-  console.log(outOfBoundaries);
   newPosition.forEach((p, i) => {
     if (p / boardWidth > boardHeight || outOfBoundaries === true) {
       //si estamos en la ultima fila todos los cocientes de p/ancho serán mayores a 19
@@ -522,7 +508,6 @@ function rotate() {
     }
   });
 
-  console.log(canMove);
   if (canMove === true) {
     if (currentTetrominoeObject.rotation === 3) {
       currentTetrominoeObject.rotation = 0;
@@ -570,12 +555,7 @@ function updateTetrisBoard() {
   let allPiecesInBoard = [];
   let divDOM = [];
   let counter = 0;
-  console.log(removeCells);
-  removeCells.forEach((p) => {
-    divDOM.push(document.getElementById(p));
-    console.log(removeCells);
-    console.log(p);
-  });
+  removeCells.forEach((p) => divDOM.push(document.getElementById(p)));
   divDOM.forEach((p) => {
     if (p.classList.value.includes("opacity")) {
       counter++;
@@ -596,8 +576,10 @@ function updateTetrisBoard() {
     newCellsPosition.forEach((e) => {
       const divDOM = document.getElementById(`${e}`);
       divDOM.classList.add("opacity");
-      isTetris++;
     });
+    let score = document.querySelector(".score_number");
+    console.log(score.textContent);
+    score.textContent = parseInt(score.textContent) + 50;
   } else {
     removeCells = removeCells.map((p) => (p = p - 10));
     if (removeCells[0] < 0) {
@@ -635,13 +617,16 @@ document.body.onkeydown = function (event) {
 };
 
 // ------------------------------------------
+let nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
+let currentTetrominoeObject = nextTetrominoeObject;
 
 function init() {
-  undrawTetrominoeInMainBoard();
-  undrawTetrominoeInMiniBoard();
-  nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
-  currentTetrominoeObject = nextTetrominoeObject;
+  drawTetrominoeInMiniBoard();
   assingPositionInMainBoard();
   drawTetrominoeInMainBoard();
-  gameInterval;
+  nextTetrominoeObject = generateRandomTetrominoeMini(tetrominoeListMini);
+  undrawTetrominoeInMiniBoard();
+  drawTetrominoeInMiniBoard();
 }
+
+init();
