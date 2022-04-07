@@ -6,6 +6,6 @@ This is the classic tetris game developed at the Neoland bootcamp to put JavaScr
 
 ## Deployment
 
-You can se the web deployement in: [https://wodtarget.netlify.app/]
+You can se the web deployement in: [https://ivsp.github.io/juego-tetris/]
 
 
