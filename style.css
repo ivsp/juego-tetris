@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.body_container {
+    background-color: #C6CFA2;
+    font-family: "Lucida Console", "Courier New", monospace;
+    color: #303a21
+}
+
+.body_container--logo {
+    text-align: center;
+}
+
+.body_container--img {
+    width: 300px;
+}
+
+.main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 30px;
+}
+
+.container_tetris {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+    height: 600px;
+    border: 2px solid #000000;
+}
+
+.cells {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: 3px solid #000000;
+    opacity: 0.2;
+}
+
+.opacity{
+    opacity: 1;
+
+}
+
+/* En un futuro nos la cargaremos */
+.cells:hover { 
+    opacity: 1;
+}
+
+.cells_padding {
+    width: 14px;
+    height: 14px;
+    padding: 3px;
+    background-color: #000000;
+}
+
+
+/*------------------------       MINI GRID  ---------------------*/
+
+.mini_container {
+    width: 150px;
+    height: 300px;
+    border: 2px solid #000000;
+    padding: 0.8rem;
+}
+
+.mini_container--score {
+    text-align: center;
+    font-weight: 100;
+}
+
+.mini_container--number {
+    border: 1px solid #000000;
+    border-bottom: 2px solid #000000;
+    margin: 0.5rem 0 1.5rem 0;
+    padding: 0.5rem;
+    text-align: center;
+}
+
+.mini_container--grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border: 2px solid #000000;
+    gap: 2px;
+}
+
+.mini_container--arrows {
+    display: flex;
+    justify-content: space-evenly;
+    margin: 1rem 0 0.5rem 0;
+}
+
+.mini_container--rotate {
+    display: flex;
+    justify-content: center;
+}
+
+.mini_container--rotate>i {
+    margin-right: 10px;
+    margin-left: 0.5rem;
+}
+
+.rotate{
+    margin-left: 0.5rem;
+}
