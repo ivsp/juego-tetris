@@ -371,8 +371,8 @@ function undrawTetrominoeInMiniBoard() {
  * la pieza.
  *
  */
-function moveRight(event) {
-  event.preventDefault();
+function moveRight() {
+  
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
   const arrNewPosition = currentTetrominoeObject.piece.map((p) => (p += 1));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
@@ -403,8 +403,8 @@ function moveRight(event) {
  *El procedimiento es el mismo que para moveRight, pero restando uno a la posición del array
  *
  */
-function moveLeft(event) {
-  event.preventDefault();
+function moveLeft() {
+  
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
   const arrNewPosition = currentTetrominoeObject.piece.map((p) => (p -= 1));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
@@ -436,8 +436,8 @@ function moveLeft(event) {
  *
  *El procedimiento es el mismo que para moveRight, pero restando uno a la posición del array
  */
-function moveDown(event) {
-  event.preventDefault();
+function moveDown() {
+  
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
   const arrNewPosition = currentTetrominoeObject.piece.map((p) => (p += 10));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
@@ -486,8 +486,7 @@ function moveDown(event) {
 
  */
 
-function rotate(event) {
-   event.preventDefault();
+function rotate() {
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
 
   undrawTetrominoeInMainBoard();
