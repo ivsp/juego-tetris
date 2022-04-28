@@ -608,6 +608,7 @@ function updateTetrisBoard() {
 // VOY A EMPEZAR POR MOVER LA PIEZA HACIA LA DERECHA CUANDO PULSAMOS LA FLECHA HACIA LA DERECHA
 
 document.body.onkeydown = function (event) {
+  event.preventDefault();
   switch (event.keyCode) {
     case 37: // Izquierda
       moveLeft(event);
