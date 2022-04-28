@@ -605,6 +605,7 @@ function updateTetrisBoard() {
 
 document.body.onkeydown = function (event) {
   switch (event.keyCode) {
+      event.preventDefault();
     case 37: // Izquierda
       moveLeft();
       break;
