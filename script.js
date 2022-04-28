@@ -371,7 +371,8 @@ function undrawTetrominoeInMiniBoard() {
  * la pieza.
  *
  */
-function moveRight() {
+function moveRight(event) {
+  event.preventDefault();
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
   const arrNewPosition = currentTetrominoeObject.piece.map((p) => (p += 1));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
@@ -402,7 +403,8 @@ function moveRight() {
  *El procedimiento es el mismo que para moveRight, pero restando uno a la posición del array
  *
  */
-function moveLeft() {
+function moveLeft(event) {
+  event.preventDefault();
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
   const arrNewPosition = currentTetrominoeObject.piece.map((p) => (p -= 1));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
@@ -434,7 +436,8 @@ function moveLeft() {
  *
  *El procedimiento es el mismo que para moveRight, pero restando uno a la posición del array
  */
-function moveDown() {
+function moveDown(event) {
+  event.preventDefault();
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
   const arrNewPosition = currentTetrominoeObject.piece.map((p) => (p += 10));
   undrawTetrominoeInMainBoard(); //llamo a la función que elimina la pieza actual
@@ -483,7 +486,8 @@ function moveDown() {
 
  */
 
-function rotate() {
+function rotate(event) {
+   event.preventDefault();
   let canMove = true; //creo una variable boolean que me indica si se puede o no mover la pieza
 
   undrawTetrominoeInMainBoard();
@@ -605,18 +609,17 @@ function updateTetrisBoard() {
 
 document.body.onkeydown = function (event) {
   switch (event.keyCode) {
-      event.preventDefault();
     case 37: // Izquierda
-      moveLeft();
+      moveLeft(event);
       break;
     case 38: // Arriba
-      rotate();
+      rotate(event);
       break;
     case 39: // Derecha
-      moveRight();
+      moveRight(event);
       break;
     case 40: // Bajar
-      moveDown();
+      moveDown(event);
       break;
   }
 };
